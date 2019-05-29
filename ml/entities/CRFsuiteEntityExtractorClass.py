@@ -53,7 +53,8 @@ class CRFsuiteEntityExtractorClass():
         sent = self._tokenize_and_tag_text(text)
         features = self.sent2features(sent)
         y_pred = self.model.predict([features])
-        return y_pred[0]
+        # return y_pred[0]
+        return self._labels_to_json(text,y_pred)
     
     def _get_labels(self)->List:
         labels = list(crf.classes_)
@@ -93,6 +94,19 @@ class CRFsuiteEntityExtractorClass():
     def _tokenize_and_tag_text(self,text: Text,entites: Dict=None)->List:
         doc = self.nlp(text)
         return [(w.text,w.tag_) for w in doc]
+
+    def _labels_to_json(self, text,data: List)->Dict:
+        entitys = defaultdict(lsit)
+        words = [w.text for w in self.nlp(text)]
+
+        for i in range(len(data)):
+            item = data[i]
+            word = words[i]
+            if len(item.split("B-"))>1 :
+                entitys[item.split("B-")[1]].append(word)
+
+
+        return [{"text":" ".join(entitys[k]),"name":k} for k in entitys]
     
     # train functions
     def _preproccess_training_data(self, data :TrainDataClass)->List:
