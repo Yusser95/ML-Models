@@ -96,7 +96,7 @@ class CRFsuiteEntityExtractorClass():
         return [(w.text,w.tag_) for w in doc]
 
     def _labels_to_json(self, text,data: List)->Dict:
-        entitys = defaultdict(lsit)
+        entitys = defaultdict(list)
         words = [w.text for w in self.nlp(text)]
 
         for i in range(len(data)):
