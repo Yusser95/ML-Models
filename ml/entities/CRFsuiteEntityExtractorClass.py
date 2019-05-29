@@ -54,7 +54,7 @@ class CRFsuiteEntityExtractorClass():
         features = self.sent2features(sent)
         y_pred = self.model.predict([features])
         # return y_pred[0]
-        return self._labels_to_json(text,y_pred)
+        return self._labels_to_json(text,y_pred[0])
     
     def _get_labels(self)->List:
         labels = list(crf.classes_)
